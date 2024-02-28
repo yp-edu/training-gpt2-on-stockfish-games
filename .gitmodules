@@ -1,0 +1,3 @@
+[submodule "viz-gpt2-stockfish-debug"]
+	path = viz-gpt2-stockfish-debug
+	url = git@hf.co:spaces/yp-edu/viz-gpt2-stockfish-debug

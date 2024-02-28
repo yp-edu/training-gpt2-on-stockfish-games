@@ -1,0 +1,10 @@
+Bootstrap: localimage
+From: ./apptainer/base.sif
+
+%files
+  ./src/train/llm.py /opt/src/train/llm.py
+  ./output /opt/output
+
+%runscript
+  cd /opt/
+  echo "Running LLM"

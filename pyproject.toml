@@ -1,0 +1,40 @@
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+src_paths = ["src", "viz-gpt2-stockfish-debug"]
+
+[tool.poetry]
+name = "training-gpt2-on-stockfish-games"
+version = "0.1.0"
+description = "Training code and visualisation."
+readme = "README.md"
+license = "MIT"
+authors = [
+    "Yoann Poupart <yoann.poupart@ens-lyon.org>",
+]
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "default"
+
+[build-system]
+requires = ["poetry-core>=1.6.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-chess = "^1.999"
+transformers = "^4.38.1"
+loguru = "^0.7.2"
+jsonlines = "^4.0.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
