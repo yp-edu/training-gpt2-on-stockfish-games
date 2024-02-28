@@ -1,4 +1,9 @@
 """Training a LLM to play chess.
+
+Use with:
+```python
+poetry run python -m src.train.llm
+```
 """
 
 import argparse
@@ -23,9 +28,13 @@ parser.add_argument(
 parser.add_argument("--n-epochs", type=int, default=1)
 parser.add_argument("--logging-steps-ratio", type=float, default=0.01)
 parser.add_argument("--eval-steps-ratio", type=float, default=0.5)
-parser.add_argument("--train-batch-size", type=int, default=50)
+parser.add_argument(
+    "--train-batch-size", type=int, default=50
+)  # 275 A100 60 other
 parser.add_argument("--gradient-accumulation-steps", type=int, default=1)
-parser.add_argument("--eval-batch-size", type=int, default=500)
+parser.add_argument(
+    "--eval-batch-size", type=int, default=500
+)  # 600 A100 150 Other
 parser.add_argument("--lr", type=float, default=1e-5)
 parser.add_argument("--dataloader-num-workers", type=int, default=4)
 parser.add_argument("--resume-from-checkpoint", type=int, default=None)
@@ -60,15 +69,8 @@ model = AutoModelForCausalLM.from_pretrained("gpt2")
 tokenizer = AutoTokenizer.from_pretrained("gpt2")
 tokenizer.pad_token = tokenizer.eos_token
 collator = CustomCollator(tokenizer=tokenizer)
-
-
-logging_steps_ratio = 0.01
-eval_steps_ratio = 0.5
 train_dataset_len = train_dataset.n_lines
-train_batch_size = 275  # 60 other
-eval_batch_size = 600  # 600 A100 150 Other
-n_epochs = 2
-gradient_accumulation_steps = 1
+
 
 training_args = TrainingArguments(
     output_dir=OUTPUT_DIR,
@@ -89,11 +91,12 @@ training_args = TrainingArguments(
     per_device_eval_batch_size=args.eval_batch_size,
     per_device_train_batch_size=args.train_batch_size,
     num_train_epochs=args.n_epochs,
-    gradient_accumulation_steps=gradient_accumulation_steps,
+    gradient_accumulation_steps=args.gradient_accumulation_steps,
+    learning_rate=args.lr,
     run_name="latest",
     fp16=True,
     remove_unused_columns=False,
-    disable_tqdm=False,
+    disable_tqdm=True,
     include_tokens_per_second=False,
     dataloader_num_workers=args.dataloader_num_workers,
     dataloader_pin_memory=True,
